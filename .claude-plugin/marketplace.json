@@ -1,0 +1,25 @@
+{
+  "name": "elricli",
+  "owner": {
+    "name": "elricli",
+    "url": "https://github.com/elricli"
+  },
+  "description": "elric's personal skills as an installable Claude Code plugin marketplace.",
+  "plugins": [
+    {
+      "name": "elricli-skills",
+      "source": "./",
+      "description": "elric's personal engineering skills: CLAUDE.md management, git commits, document typesetting, charting, skill authoring, and skill discovery.",
+      "category": "engineering",
+      "keywords": [
+        "skills",
+        "agent-skills",
+        "claude-md",
+        "git-commit",
+        "pdf",
+        "charts",
+        "skill-authoring"
+      ]
+    }
+  ]
+}
