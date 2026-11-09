@@ -1,7 +1,7 @@
 {
   "name": "elricli-skills",
   "version": "0.1.0",
-  "description": "elric's personal engineering skills for Codex and other Agent Skills harnesses: statechart verification, TDD, prototyping, CLAUDE.md management, git commits, document typesetting, charting, skill authoring, and skill discovery.",
+  "description": "elric's personal engineering skills for Codex and other Agent Skills harnesses: statechart verification, TDD, and prototyping.",
   "author": {
     "name": "elricli",
     "url": "https://github.com/elricli"
@@ -15,17 +15,14 @@
     "statechart",
     "tdd",
     "prototype",
-    "claude-md",
-    "git-commit",
-    "pdf",
-    "charts",
-    "skill-authoring"
+    "formal-verification",
+    "tla+"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "elricli skills",
-    "shortDescription": "Personal engineering skills: statechart, TDD, prototyping, CLAUDE.md, git commits, typesetting, charts, skill authoring.",
-    "longDescription": "A personal skills pack covering statechart verification (TLA+ model checking), test-driven development, rapid prototyping, CLAUDE.md configuration management, high-quality git commits, professional document typesetting, template-driven charts, skill authoring and evaluation, and skill discovery.",
+    "shortDescription": "Personal engineering skills: statechart, TDD, prototyping.",
+    "longDescription": "A personal skills pack covering statechart verification (TLA+ model checking), test-driven development, and rapid prototyping for design decisions.",
     "developerName": "elricli",
     "category": "Developer Tools",
     "capabilities": [
@@ -34,7 +31,7 @@
     ],
     "defaultPrompt": [
       "Verify this state machine design with TLC.",
-      "Help me write a better CLAUDE.md for this project."
+      "Help me write a failing test first."
     ],
     "websiteURL": "https://github.com/elricli/skills",
     "screenshots": []

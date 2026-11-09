@@ -1,7 +1,7 @@
 {
   "name": "elricli-skills",
   "version": "0.1.0",
-  "description": "elric's personal engineering skills for Claude Code and other Agent Skills harnesses: statechart verification, TDD, prototyping, CLAUDE.md management, git commits, document typesetting, charting, skill authoring, and skill discovery.",
+  "description": "elric's personal engineering skills for Claude Code and other Agent Skills harnesses: statechart verification, TDD, and prototyping.",
   "author": {
     "name": "elricli",
     "url": "https://github.com/elricli"
@@ -15,22 +15,12 @@
     "statechart",
     "tdd",
     "prototype",
-    "claude-md",
-    "git-commit",
-    "pdf",
-    "charts",
-    "skill-authoring"
+    "formal-verification",
+    "tla+"
   ],
   "skills": [
     "./skills/statechart",
     "./skills/tdd",
-    "./skills/prototype",
-    "./skills/claude-md-manager",
-    "./skills/find-skills",
-    "./skills/git-commit",
-    "./skills/kami",
-    "./skills/lieflat-charts",
-    "./skills/log-query-sql",
-    "./skills/skill-creator"
+    "./skills/prototype"
   ]
 }
