@@ -9,16 +9,16 @@
     {
       "name": "elricli-skills",
       "source": "./",
-      "description": "elric's personal engineering skills: CLAUDE.md management, git commits, document typesetting, charting, skill authoring, and skill discovery.",
+      "description": "elric's personal engineering skills: statechart verification (TLA+ model checking), test-driven development, and rapid prototyping for design decisions.",
       "category": "engineering",
       "keywords": [
         "skills",
         "agent-skills",
-        "claude-md",
-        "git-commit",
-        "pdf",
-        "charts",
-        "skill-authoring"
+        "statechart",
+        "tdd",
+        "prototype",
+        "formal-verification",
+        "tla+"
       ]
     }
   ]

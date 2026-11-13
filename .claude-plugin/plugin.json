@@ -18,9 +18,5 @@
     "formal-verification",
     "tla+"
   ],
-  "skills": [
-    "./skills/statechart",
-    "./skills/tdd",
-    "./skills/prototype"
-  ]
+  "skills": "./skills/"
 }
