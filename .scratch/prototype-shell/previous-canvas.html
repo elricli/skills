@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>活动管理 · 多页面原型</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #243044;
+      background: #f4f5f7;
+      --ink: #243044;
+      --muted: #778195;
+      --line: #e6e9ef;
+      --accent: #405dd6;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; height: 100dvh; display: flex; flex-direction: column; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 3px solid #a7b5ff;
+      outline-offset: 3px;
+    }
+    .toolbar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 14px 20px;
+      background: white;
+      border-bottom: 1px solid var(--line);
+      z-index: 1;
+    }
+    .canvas-title { font-size: 14px; font-weight: 650; white-space: nowrap; }
+    .canvas-title small { margin-left: 10px; color: var(--muted); font-weight: 400; }
+    .page-index { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+    .page-index button, .tools button {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: white;
+      color: var(--ink);
+      min-height: 34px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .page-index button[aria-current="page"] { background: #edf0ff; border-color: #bac6ff; color: var(--accent); }
+    .tools { display: flex; align-items: center; gap: 6px; }
+    #zoom-level { min-width: 44px; text-align: center; font-size: 12px; font-variant-numeric: tabular-nums; }
+    #viewport {
+      position: relative;
+      flex: 1;
+      min-height: 280px;
+      overflow: hidden;
+      touch-action: none;
+      background-image: radial-gradient(#d5dae4 1px, transparent 1px);
+      background-size: 20px 20px;
+      cursor: grab;
+    }
+    #viewport.dragging, #viewport.dragging * { cursor: grabbing; user-select: none; }
+    #world {
+      position: absolute;
+      display: grid;
+      grid-template-columns: repeat(3, max-content);
+      align-items: start;
+      gap: 100px;
+      padding: 40px;
+      width: max-content;
+      transform-origin: 0 0;
+    }
+    .artboard { position: relative; width: var(--page-width, 960px); }
+    .artboard:focus { outline: none; }
+    .artboard:focus .screen { box-shadow: 0 0 0 3px #a7b5ff, 0 12px 36px #2430440d; }
+    .artboard[data-next]::after {
+      content: attr(data-next);
+      position: absolute;
+      left: calc(100% + 12px);
+      top: 50%;
+      width: 76px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    .page-label { display: flex; align-items: baseline; justify-content: space-between; margin: 0 0 14px; }
+    .page-label h2 { margin: 0; font-size: 18px; font-weight: 600; }
+    .page-label span { font-size: 13px; color: var(--muted); }
+    .screen {
+      height: var(--page-height, 640px);
+      display: flex;
+      overflow: auto;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      box-shadow: 0 12px 36px #2430440d;
+      cursor: auto;
+      overscroll-behavior: contain;
+    }
+    .sidebar { width: 168px; flex: 0 0 168px; background: #fafbfe; padding: 28px 16px; border-right: 1px solid var(--line); }
+    .product-name { font-size: 19px; font-weight: 700; margin: 0 0 38px 10px; letter-spacing: 1px; }
+    .sidebar small { display: block; margin: 0 10px 12px; color: var(--muted); font-size: 11px; }
+    .nav-item { display: block; padding: 12px; background: #edf0ff; color: var(--accent); border-radius: 7px; font-size: 13px; }
+    .page-body { flex: 1; min-width: 0; padding: 28px 32px; }
+    .breadcrumb { font-size: 12px; color: var(--muted); margin-bottom: 28px; }
+    .heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 24px; }
+    h1 { font-size: 25px; margin: 0 0 8px; font-weight: 650; }
+    p { margin: 0; }
+    .subtitle { color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .primary, .secondary { border: 0; border-radius: 6px; padding: 10px 16px; font-size: 12px; white-space: nowrap; }
+    .primary { background: var(--accent); color: white; }
+    .secondary { background: white; border: 1px solid var(--line); color: var(--ink); }
+    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 26px; }
+    .metric { border: 1px solid var(--line); border-radius: 8px; padding: 18px; }
+    .metric span { display: block; color: var(--muted); font-size: 12px; margin-bottom: 12px; }
+    .metric strong { font-size: 26px; font-weight: 600; }
+    .section-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .section-heading h3 { margin: 0; font-size: 14px; }
+    .section-heading span { font-size: 12px; color: var(--muted); }
+    table { border-collapse: collapse; width: 100%; font-size: 12px; }
+    th { background: #f7f8fb; color: var(--muted); font-weight: 400; text-align: left; }
+    th, td { padding: 16px 10px; border-bottom: 1px solid var(--line); }
+    .text-button { border: 0; padding: 0; background: none; color: var(--accent); font-size: 12px; }
+    .badge { background: #eef6f2; color: #428464; padding: 4px 8px; border-radius: 4px; font-size: 11px; }
+    .badge.neutral { background: #f0f2f6; color: var(--muted); }
+    .back { margin-bottom: 20px; }
+    .detail-card { border: 1px solid var(--line); border-radius: 8px; padding: 22px; margin: 24px 0; }
+    .detail-card h3 { margin: 0 0 20px; font-size: 14px; }
+    dl { display: grid; grid-template-columns: 100px 1fr; gap: 18px; margin: 0; font-size: 13px; }
+    dt { color: var(--muted); }
+    dd { margin: 0; }
+    .attendees { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+    .avatar { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: #f0f2fb; color: #6577ab; font-size: 11px; }
+    form { max-width: 510px; }
+    label { display: block; font-size: 12px; margin: 20px 0 8px; }
+    input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid #dce1eb; border-radius: 6px; background: white; color: var(--ink); font-size: 13px; }
+    textarea { resize: vertical; line-height: 1.6; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-actions { display: flex; gap: 10px; margin-top: 26px; }
+    .hint { position: absolute; bottom: 18px; right: 20px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 6px; background: #ffffffee; color: var(--muted); font-size: 11px; pointer-events: none; }
+    #notice { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); padding: 12px 20px; border-radius: 8px; background: var(--ink); color: white; font-size: 13px; z-index: 2; }
+    @media (max-width: 700px) {
+      .toolbar { gap: 10px; padding: 10px 12px; }
+      .canvas-title { width: 100%; }
+      .page-index { flex-basis: 100%; }
+      .hint { right: 12px; bottom: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="canvas-title">活动管理 <small>页面原型 · 本地演示</small></div>
+    <nav class="page-index" aria-label="页面索引">
+      <button type="button" data-go="page-list">01 活动列表</button>
+      <button type="button" data-go="page-detail">02 活动详情</button>
+      <button type="button" data-go="page-edit">03 编辑活动</button>
+    </nav>
+    <div class="tools" role="group" aria-label="画布视图">
+      <button type="button" id="zoom-out" aria-label="缩小">−</button>
+      <output id="zoom-level" aria-label="缩放比例">100%</output>
+      <button type="button" id="zoom-in" aria-label="放大">+</button>
+      <button type="button" id="actual-size">100%</button>
+      <button type="button" id="fit-all">查看全部</button>
+    </div>
+  </header>
+
+  <main id="viewport" aria-label="多页面原型画布">
+    <div id="world">
+      <section class="artboard" id="page-list" aria-labelledby="label-list" tabindex="-1" data-next="查看详情 →">
+        <div class="page-label"><h2 id="label-list">01 · 活动列表</h2><span>960 × 640</span></div>
+        <div class="screen">
+          <aside class="sidebar"><div class="product-name">集会</div><small>工作空间</small><span class="nav-item">活动管理</span></aside>
+          <div class="page-body">
+            <div class="breadcrumb">工作空间 / 活动管理</div>
+            <div class="heading">
+              <div><h1>活动管理</h1><p class="subtitle">安排下一次相聚，和参与者保持连接。</p></div>
+              <button type="button" class="primary" data-go="page-detail">查看近期活动</button>
+            </div>
+            <div class="metrics">
+              <div class="metric"><span>本月活动</span><strong>3</strong></div>
+              <div class="metric"><span>累计报名</span><strong>126</strong></div>
+              <div class="metric"><span>待举办</span><strong>2</strong></div>
+            </div>
+            <div class="section-heading"><h3>全部活动</h3><span>共 3 场</span></div>
+            <table>
+              <thead><tr><th>活动名称</th><th>日期</th><th>报名</th><th>状态</th></tr></thead>
+              <tbody>
+                <tr><td><button type="button" class="text-button" data-go="page-detail" data-event-name>秋日产品交流会</button></td><td data-event-date>2026.11.20</td><td>42 / 60</td><td><span class="badge">报名中</span></td></tr>
+                <tr><td>设计师圆桌</td><td>2026.11.27</td><td>36 / 40</td><td><span class="badge">报名中</span></td></tr>
+                <tr><td>社区开放日</td><td>2026.11.06</td><td>48 / 50</td><td><span class="badge neutral">已结束</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="artboard" id="page-detail" aria-labelledby="label-detail" tabindex="-1" data-next="编辑活动 →">
+        <div class="page-label"><h2 id="label-detail">02 · 活动详情</h2><span>960 × 640</span></div>
+        <div class="screen">
+          <aside class="sidebar"><div class="product-name">集会</div><small>工作空间</small><span class="nav-item">活动管理</span></aside>
+          <div class="page-body">
+            <button type="button" class="text-button back" data-go="page-list">← 返回活动列表</button>
+            <div class="heading">
+              <div><h1 data-event-name>秋日产品交流会</h1><p class="subtitle">聊聊最近的产品实践，认识一起做事的人。</p></div>
+              <button type="button" class="primary" data-go="page-edit">编辑活动</button>
+            </div>
+            <span class="badge">报名中</span>
+            <div class="detail-card">
+              <h3>活动信息</h3>
+              <dl>
+                <dt>举办日期</dt><dd data-event-date>2026.11.20</dd>
+                <dt>活动类型</dt><dd data-event-kind>线下交流</dd>
+                <dt>举办地点</dt><dd>上海 · 梧桐空间</dd>
+                <dt>活动简介</dt><dd data-event-description>分享真实案例，交流产品经验。</dd>
+                <dt>报名人数</dt><dd>42 / 60 人</dd>
+              </dl>
+            </div>
+            <div class="section-heading"><h3>最近报名</h3><span>共 42 人</span></div>
+            <div class="attendees"><span class="avatar">林</span><span class="avatar">陈</span><span class="avatar">周</span><p class="subtitle">林晓、陈默、周然等已报名</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="artboard" id="page-edit" aria-labelledby="label-edit" tabindex="-1">
+        <div class="page-label"><h2 id="label-edit">03 · 编辑活动</h2><span>960 × 640</span></div>
+        <div class="screen">
+          <aside class="sidebar"><div class="product-name">集会</div><small>工作空间</small><span class="nav-item">活动管理</span></aside>
+          <div class="page-body">
+            <button type="button" class="text-button back" data-go="page-detail">← 返回活动详情</button>
+            <h1>编辑活动</h1><p class="subtitle">更新活动信息，保存后返回详情。</p>
+            <form id="event-form">
+              <label for="event-name">活动名称</label>
+              <input id="event-name" name="name" value="秋日产品交流会" required maxlength="40">
+              <div class="form-row">
+                <div><label for="event-date">举办日期</label><input id="event-date" name="date" type="date" value="2026-11-20" required></div>
+                <div><label for="event-kind">活动类型</label><select id="event-kind" name="kind"><option>线下交流</option><option>线上分享</option><option>工作坊</option></select></div>
+              </div>
+              <label for="event-description">活动简介</label>
+              <textarea id="event-description" name="description" rows="3">分享真实案例，交流产品经验。</textarea>
+              <div class="form-actions"><button class="primary" type="submit">保存修改</button><button class="secondary" type="button" data-go="page-detail" id="cancel-edit">取消</button></div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="hint" aria-hidden="true">拖动画布空白处平移 · Ctrl / ⌘ + 滚轮缩放</div>
+  </main>
+  <div id="notice" role="status" hidden></div>
+
+  <script>
+    const viewport = document.getElementById('viewport');
+    const world = document.getElementById('world');
+    const zoomLevel = document.getElementById('zoom-level');
+    const form = document.getElementById('event-form');
+    const notice = document.getElementById('notice');
+    const camera = { x: 0, y: 0, scale: 1 };
+    let overview = true;
+    let drag = null;
+    let noticeTimer;
+
+    function paint() {
+      world.style.transform = `translate(${camera.x}px, ${camera.y}px) scale(${camera.scale})`;
+      zoomLevel.value = `${Math.round(camera.scale * 100)}%`;
+    }
+
+    function zoomAt(scale, x, y) {
+      const next = Math.min(2.5, Math.max(0.02, scale));
+      const ratio = next / camera.scale;
+      camera.x = x - (x - camera.x) * ratio;
+      camera.y = y - (y - camera.y) * ratio;
+      camera.scale = next;
+      overview = false;
+      paint();
+    }
+
+    function fitAll() {
+      const padding = 32;
+      camera.scale = Math.min(1, (viewport.clientWidth - padding * 2) / world.offsetWidth, (viewport.clientHeight - padding * 2) / world.offsetHeight);
+      camera.x = (viewport.clientWidth - world.offsetWidth * camera.scale) / 2;
+      camera.y = (viewport.clientHeight - world.offsetHeight * camera.scale) / 2;
+      overview = true;
+      document.querySelectorAll('.page-index [aria-current]').forEach(button => button.removeAttribute('aria-current'));
+      paint();
+    }
+
+    function focusPage(id) {
+      const page = document.getElementById(id);
+      if (!page || !page.classList.contains('artboard')) return;
+      camera.scale = Math.min(1, (viewport.clientWidth - 80) / page.offsetWidth, (viewport.clientHeight - 80) / page.offsetHeight);
+      camera.x = (viewport.clientWidth - page.offsetWidth * camera.scale) / 2 - page.offsetLeft * camera.scale;
+      camera.y = (viewport.clientHeight - page.offsetHeight * camera.scale) / 2 - page.offsetTop * camera.scale;
+      overview = false;
+      document.querySelectorAll('.page-index [data-go]').forEach(button => {
+        if (button.dataset.go === id) button.setAttribute('aria-current', 'page');
+        else button.removeAttribute('aria-current');
+      });
+      paint();
+      page.focus({ preventScroll: true });
+    }
+
+    document.querySelectorAll('[data-go]').forEach(button => {
+      button.addEventListener('click', () => focusPage(button.dataset.go));
+    });
+    document.getElementById('fit-all').addEventListener('click', fitAll);
+    document.getElementById('zoom-in').addEventListener('click', () => zoomAt(camera.scale * 1.25, viewport.clientWidth / 2, viewport.clientHeight / 2));
+    document.getElementById('zoom-out').addEventListener('click', () => zoomAt(camera.scale / 1.25, viewport.clientWidth / 2, viewport.clientHeight / 2));
+    document.getElementById('actual-size').addEventListener('click', () => zoomAt(1, viewport.clientWidth / 2, viewport.clientHeight / 2));
+
+    viewport.addEventListener('pointerdown', event => {
+      if (event.button !== 0 || event.target.closest('.screen')) return;
+      drag = { id: event.pointerId, x: event.clientX, y: event.clientY, startX: camera.x, startY: camera.y };
+      overview = false;
+      viewport.setPointerCapture(event.pointerId);
+      viewport.classList.add('dragging');
+      event.preventDefault();
+    });
+    viewport.addEventListener('pointermove', event => {
+      if (!drag || event.pointerId !== drag.id) return;
+      camera.x = drag.startX + event.clientX - drag.x;
+      camera.y = drag.startY + event.clientY - drag.y;
+      paint();
+    });
+    function endDrag(event) {
+      if (!drag || event.pointerId !== drag.id) return;
+      if (viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
+      drag = null;
+      viewport.classList.remove('dragging');
+    }
+    viewport.addEventListener('pointerup', endDrag);
+    viewport.addEventListener('pointercancel', endDrag);
+    viewport.addEventListener('lostpointercapture', endDrag);
+    viewport.addEventListener('wheel', event => {
+      if (!event.ctrlKey && !event.metaKey) return;
+      event.preventDefault();
+      const rect = viewport.getBoundingClientRect();
+      zoomAt(camera.scale * Math.exp(-event.deltaY * 0.005), event.clientX - rect.left, event.clientY - rect.top);
+    }, { passive: false });
+
+    let saved = Object.fromEntries(new FormData(form));
+    document.getElementById('cancel-edit').addEventListener('click', () => {
+      for (const [name, value] of Object.entries(saved)) form.elements.namedItem(name).value = value;
+    });
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      saved = Object.fromEntries(new FormData(form));
+      document.querySelectorAll('[data-event-name]').forEach(element => element.textContent = saved.name);
+      document.querySelectorAll('[data-event-date]').forEach(element => element.textContent = saved.date.replaceAll('-', '.'));
+      document.querySelectorAll('[data-event-kind]').forEach(element => element.textContent = saved.kind);
+      document.querySelectorAll('[data-event-description]').forEach(element => element.textContent = saved.description);
+      focusPage('page-detail');
+      notice.textContent = '已保存演示修改 · 刷新后恢复初始数据';
+      notice.hidden = false;
+      clearTimeout(noticeTimer);
+      noticeTimer = setTimeout(() => { notice.hidden = true; }, 3500);
+    });
+
+    new ResizeObserver(() => { if (overview) fitAll(); }).observe(viewport);
+    fitAll();
+  </script>
+</body>
+</html>

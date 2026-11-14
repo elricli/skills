@@ -9,7 +9,7 @@ Currently here:
   the state machine as Mermaid. Catches design bugs before code.
 - `tdd` — test-driven development workflow: write failing test first, then
   implement, then verify.
-- `prototype` — build a throwaway prototype to settle a design decision cheaply.
-  Speed over polish, no production code.
+- `prototype` — arrange multiple UI page artboards on one navigable canvas.
+  Includes a standalone HTML starter with pan, zoom, and page navigation.
 
 More land here as I build them.

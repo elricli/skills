@@ -11,3 +11,4 @@ mistake here and add the rule. Drop a rule once its mistake cannot happen.
 | Marketplace copy must not advertise skills that do not exist | manual — `check.mjs` cannot parse prose; keep skill names in it only via the table |
 | New skills land as `skills/<name>/SKILL.md` and get a README table row in the same commit | `scripts/check.mjs` catches the missing row |
 | Run `node scripts/check.mjs` before committing manifest or README changes | this table; CI does not exist yet |
+| Model choices use runtime discovery and recommendations; do not restore model rule files or fixed model fallbacks | `scripts/check.mjs` flags retired rule-file references and hardcoded Claude/Grok defaults |

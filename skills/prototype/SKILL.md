@@ -1,24 +1,54 @@
 ---
 name: prototype
-description: "Build a throwaway prototype to settle a design decision cheaply. Speed over polish, no production code. Use for /prototype, 'prototype this', 'which approach should I take', or when comparing alternatives."
+description: "Build UI wireframes and product prototypes as multiple page artboards on one navigable canvas. Use for /prototype, 原型图, 多页面原型, 画布原型, wireframes, screen flows, or comparing UI layouts before implementation."
 disable-model-invocation: true
 ---
 
-### Prototype
+# Prototype
 
-**You own the design decision, not the code. The prototype is a throwaway instrument.**
+Deliver one canvas containing the product's different pages as separate artboards. The reviewer should see the page structure and flow together, then zoom into any page. Use this format for UI prototypes unless the user requests another format.
 
-The one playbook where the Laziness Protocol's "smallest change" and the verification bar invert. Speed over polish, code quality does not matter, no planning. The rigor is in picking the right design cheaply. Propose variations the user didn't ask for, throw an approach away and try another.
+The artifact settles product and design questions. Keep its code disposable; carry approved decisions into the real implementation.
 
-1. Scope the decision the prototype exists to make: which layout, which interaction, which density, or for an empirical fork which behavior, timing, or approach. No decision means no prototype. Route to Feature.
-2. Gather references when the design space is open. Read the repo's own design sources first — AGENTS.md design pointers, design-rule docs, design skills under `.agents/skills/` — and derive layout references from them before asking the user. Search for prior art, summarize a moodboard of themes, palettes, and layouts, let the user pick directions before building. Skip when the direction is set.
-3. Build throwaway in an isolated scratch dir, separate from production source. For a visual decision, vanilla HTML/CSS/JS or the lightest stack that renders the idea, CDN deps, a dev server with hot reload. For a behavioral or timing decision, the smallest script that exercises the question. No production framework, no tests, no abstractions. Accumulate rounds in sibling topic-dated dirs (`<Project>-prototypes/<topic>-<date>/`), never overwriting an earlier round.
-4. When comparing alternatives, build them behind one switcher (buttons or a keypress), each variant labeled. This is the **exhaust-the-design-space** principle skill made cheap.
-5. Verify on the matching surface. For a visual decision, screenshot each variant via the control skill and drive the interaction. For a behavioral or timing decision, observe the thing you are deciding by logging the timing, printing the output, or watching the render. The observation is the test here, not an assertion. When the project has a design skill or design rules, check each variant against them before presenting.
-6. Present alternatives, tradeoffs, and a recommendation. The output is the decision plus the throwaway artifact, not shippable code.
+## Preserve the canvas UI
 
-**Preserve what the user approved.** A feature or variant the user confirmed in an earlier round survives every later round unless they explicitly drop it. Losing a confirmed feature is the correction that costs the most rework: when exploring a new style, keep the old variant on the switcher and add, not replace.
+Use [the supplied canvas reference](references/canvas-reference.png) as the visual specification for everything outside the page interiors. Keep its title bar, project menu, Export and window controls, Page 1 selector, floating presentation/settings/zoom controls, canvas heading, artboard labels/actions, plain gray background, and bottom tool palette. Match their positions, spacing, sizes, type, colors, borders, icons, radii, and shadows. Replace page content inside `.screen-inner`; keep the surrounding canvas UI fixed unless the user requests a change to it.
 
-**Stop at the decision.** Once the user says "implement it", the prototype phase is over. Hand off the decisions (write them to the project's decisions/features docs if it keeps such files) and leave the prototype scratch dir behind. A prototype that keeps absorbing implementation requests has become production code without review — cut it off.
+The user explicitly removed the reference's Ask Claude button. Omit the button, its popover, and its event handlers. Compact and recenter the remaining tool palette. This is the approved `remove-ask-claude` exception in the comparison metadata; it does not authorize other canvas UI changes.
 
-**Reply:** the variants explored, the evidence (screenshots for a visual decision, the observed output or timing for a behavioral one), tradeoffs, your recommendation, and the scratch path. Say plainly that the prototype is throwaway.
+Inspect the reference before changing the template. Do not substitute a dot grid, a permanent page-index row, another toolbar layout, or a restyled canvas. Those change the requested deliverable even when the pages themselves are correct.
+
+## Shape the canvas
+
+- Read the requested scope, references, earlier approvals, and the repo's design rules first. Infer a small page inventory from the task. Ask only about a product choice that materially changes the result and cannot be inferred.
+- Give each page a stable ID, descriptive name, and viewport size. Include the pages needed to explain the requested flow. Separate important states such as empty results or a confirmation into labeled artboards when they need review.
+- Arrange the main flow left to right, related states underneath, and alternative directions in labeled groups. Keep distinct pages visible together; a tab or variant switcher alone does not deliver the canvas.
+- Draw recognizable page UI at the requested fidelity, with meaningful sample content and consistent navigation. Boxes labeled "list page" or "detail page" explain a sitemap, not the page design. A static screenshot collage loses the ability to inspect and revise the UI.
+- Match the supplied reference's density, framing, and fidelity. When direction is open, derive it from the repo's design sources or explore a few relevant alternatives. Once direction is set, build it without another moodboard approval step.
+
+## Build the artifact
+
+Use an isolated scratch directory outside production source, following the project's convention or `<Project>-prototypes/<topic>-<date>/`. Keep later rounds in sibling directories, with a suffix for multiple rounds on the same date. Preserve approved pages and features in each new round.
+
+For an HTML deliverable, copy [assets/canvas.html](assets/canvas.html) into the scratch directory. It contains the reference canvas UI and editable example pages. Replace the sample page interiors with the requested product UI. Adjust artboard dimensions, names, and grouping to the requested pages while retaining the canvas controls and their styling. Retain the reference names and positions when verifying the canvas shell against the supplied screenshot.
+
+The canvas needs:
+
+- All in-scope page artboards mounted together in an overview, with enough space between them to distinguish each page.
+- Panning, zoom controls, a fit-all action, and a readable view of an individual page. Scale the canvas without squeezing desktop pages into mobile layouts.
+- A page index that focuses the corresponding artboard. Use labeled connectors when the flow is ambiguous.
+- The interactions needed to evaluate the design. A main action can focus its destination artboard; forms and state changes can use local mock data. Make the main path understandable without a backend.
+
+The starter uses `data-go` on the Page 1 dropdown entries and in-page buttons to focus an artboard by ID. Add each page as an `.artboard` inside `#world`, with a `.page-label` and a `.screen` containing `.screen-inner`. Set `--frame-width` and `--frame-height` on each artboard. Keep page content in `.screen-inner`; the canvas handles navigation independently.
+
+Prefer a self-contained HTML file that opens directly. Use a local server or a heavier stack only when the prototype needs it and the environment permits it. Do not add backend integration or production scaffolding to explain a layout.
+
+## Verify and hand off
+
+Open the artifact with an available browser or rendering tool. Check the overview and inspect each page at a readable scale. Exercise panning, zoom, fit-all, page-index navigation, and the main user path. Check for clipped content, overlapping artboards, and canvas gestures swallowing normal page interactions. If browser verification is unavailable, report that limitation explicitly.
+
+For canvas UI changes, capture the initial view at the size and device scale in [references/canvas-baseline.json](references/canvas-baseline.json). Compare it with the unchanged reference using `uv run --with pillow python scripts/compare_canvas.py <actual.png> --output <comparison-dir> --approved-change remove-ask-claude`, with paths resolved from this skill. The comparison excludes the two page interiors and the explicitly approved toolbar change. Also check that the removed button and popover are absent and the remaining tools are centered. Keep the source image and original page exclusion rectangles fixed. Record any further user-approved exception by name and scope before comparing. Inspect the generated difference image and per-region report. Any nonzero difference outside those areas remains a failed pixel-exact check; report the residual instead of calling the result pixel-exact. Do not replace native canvas controls with screenshot slices or relax the comparison to make it pass.
+
+Deliver the editable artifact and its path, with an overview image and useful page closeups when the environment supports them. Screenshots supplement the canvas. Name the pages, describe which interactions are mocked, and identify any open design decision. Recommend a direction when alternatives were requested.
+
+When the user approves implementation, stop extending the prototype. Carry the chosen pages, states, and interactions into the project's implementation workflow, preserving any decisions/features record it already uses.

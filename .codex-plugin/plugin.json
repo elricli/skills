@@ -1,7 +1,7 @@
 {
-  "name": "elricli-skills",
+  "name": "elricli",
   "version": "0.1.0",
-  "description": "elric's personal engineering skills for Codex and other Agent Skills harnesses: statechart verification, TDD, and prototyping.",
+  "description": "elric's engineering skills, mostly ported from poteto's pstack: chef-mode playbooks, arena/interrogate/swarm panels, verification skills, and 24 steering principles.",
   "author": {
     "name": "elricli",
     "url": "https://github.com/elricli"
@@ -16,13 +16,16 @@
     "tdd",
     "prototype",
     "formal-verification",
-    "tla+"
+    "tla+",
+    "chef-mode",
+    "principles",
+    "arena"
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "elricli skills",
-    "shortDescription": "Personal engineering skills: statechart, TDD, prototyping.",
-    "longDescription": "A personal skills pack covering statechart verification (TLA+ model checking), test-driven development, and rapid prototyping for design decisions.",
+    "displayName": "elricli",
+    "shortDescription": "chef-mode playbooks, review panels, verification skills, 24 principles.",
+    "longDescription": "elric's engineering skills, mostly ported from poteto's pstack: chef-mode playbooks, arena/interrogate/swarm panels, verification skills, and 24 steering principles.",
     "developerName": "elricli",
     "category": "Developer Tools",
     "capabilities": [
@@ -30,8 +33,8 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Verify this state machine design with TLC.",
-      "Help me write a failing test first."
+      "Run chef-mode on this bug: repro first, then fix and verify.",
+      "Interrogate this diff for real bugs."
     ],
     "websiteURL": "https://github.com/elricli/skills",
     "screenshots": []

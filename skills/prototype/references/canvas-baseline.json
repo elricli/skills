@@ -1,0 +1,25 @@
+{
+  "reference": "canvas-reference.png",
+  "sha256": "61d55947ee50594e593b0eb855a891abfc58cda8cf93b1287c6d7c442cca1055",
+  "viewport": { "width": 2000, "height": 1870, "deviceScaleFactor": 1 },
+  "pageInteriors": [
+    { "name": "Player", "left": 165, "top": 436, "right": 1160, "bottom": 1056 },
+    { "name": "Settings · Appearance", "left": 1217, "top": 436, "right": 1975, "bottom": 1181 }
+  ],
+  "approvedChanges": {
+    "remove-ask-claude": {
+      "request": "ASK Claude 这个按钮需要去掉！",
+      "effect": "Remove the button and its popover; compact and recenter the remaining tool palette.",
+      "regions": [[718, 1790, 1284, 1865]]
+    }
+  },
+  "regions": {
+    "title-bar": [0, 0, 2000, 70],
+    "page-menu": [10, 78, 140, 146],
+    "view-controls": [1782, 78, 1992, 146],
+    "canvas-heading": [158, 250, 700, 325],
+    "player-label-and-actions": [158, 398, 1168, 435],
+    "settings-label-and-actions": [1210, 398, 1982, 435],
+    "bottom-toolbar": [718, 1790, 1284, 1865]
+  }
+}

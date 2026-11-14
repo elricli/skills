@@ -1,7 +1,7 @@
 {
-  "name": "elricli-skills",
+  "name": "elricli",
   "version": "0.1.0",
-  "description": "elric's personal engineering skills for Claude Code and other Agent Skills harnesses: statechart verification, TDD, and prototyping.",
+  "description": "elric's engineering skills, mostly ported from poteto's pstack: chef-mode playbooks, arena/interrogate/swarm panels, verification skills, and 24 steering principles.",
   "author": {
     "name": "elricli",
     "url": "https://github.com/elricli"
@@ -16,7 +16,10 @@
     "tdd",
     "prototype",
     "formal-verification",
-    "tla+"
+    "tla+",
+    "chef-mode",
+    "principles",
+    "arena"
   ],
   "skills": "./skills/"
 }

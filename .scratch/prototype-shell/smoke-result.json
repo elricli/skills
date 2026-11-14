@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "checks": [
+    "no Ask Claude button or popover",
+    "eight centered tools",
+    "reference viewport geometry",
+    "dropdown focus and main page flow",
+    "save and cancel local edits",
+    "pan, zoom, 100%, fit-all, presentation",
+    "labels, drawing and notes",
+    "standalone HTML export",
+    "close and return",
+    "mobile navigation",
+    "no page errors or external requests"
+  ]
+}

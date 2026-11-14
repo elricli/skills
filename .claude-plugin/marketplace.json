@@ -7,7 +7,7 @@
   "description": "elric's personal skills as an installable Claude Code plugin marketplace.",
   "plugins": [
     {
-      "name": "elricli-skills",
+      "name": "elricli",
       "source": "./",
       "description": "elric's personal engineering skills: statechart verification (TLA+ model checking), test-driven development, and rapid prototyping for design decisions.",
       "category": "engineering",

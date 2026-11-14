@@ -1,0 +1,171 @@
+<title>Reflect 综合 — 三项目挖掘结果</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root {
+  /* 审计报告式：纸面浅暖灰底、墨色正文、单一品红强调（接受=品红、拒绝=灰、积压=青） */
+  --bg: #faf9f7;
+  --surface: #ffffff;
+  --fg: #23201c;
+  --fg-2: #6b655d;
+  --line: #e5e1da;
+  --accent: #b81b54;
+  --accent-soft: #f7e6ed;
+  --teal: #0e7a70;
+  --teal-soft: #e3f1ef;
+  --dim: #98918a;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #191714;
+  --surface: #211e1a;
+  --fg: #eae6df;
+  --fg-2: #a39b91;
+  --line: #37332d;
+  --accent: #e05587;
+  --accent-soft: #3a1e2a;
+  --teal: #4cc2b5;
+  --teal-soft: #16302d;
+  --dim: #6f6960;
+  color-scheme: dark;
+}}
+:root[data-theme="dark"] {
+  --bg: #191714;
+  --surface: #211e1a;
+  --fg: #eae6df;
+  --fg-2: #a39b91;
+  --line: #37332d;
+  --accent: #e05587;
+  --accent-soft: #3a1e2a;
+  --teal: #4cc2b5;
+  --teal-soft: #16302d;
+  --dim: #6f6960;
+  color-scheme: dark;
+}
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Segoe UI", -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 48px;
+}
+.wrap { max-width: 880px; margin: 0 auto; }
+h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 4px; }
+.sub { color: var(--fg-2); font-size: 13px; margin-bottom: 24px; }
+h2 { font-size: 15px; font-weight: 700; margin: 32px 0 12px; padding-top: 20px; border-top: 1px solid var(--line); }
+h2 .n { color: var(--accent); font-variant-numeric: tabular-nums; margin-right: 8px; }
+.tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; margin-left: 8px; vertical-align: 2px; }
+.tag.applied { background: var(--accent-soft); color: var(--accent); }
+.tag.conv { background: var(--teal-soft); color: var(--teal); }
+table { width: 100%; border-collapse: collapse; margin: 8px 0 4px; font-size: 13px; }
+th { text-align: left; color: var(--fg-2); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--line); }
+td { padding: 10px 10px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+td.id { color: var(--dim); font-variant-numeric: tabular-nums; white-space: nowrap; width: 44px; }
+td.route { color: var(--fg-2); font-size: 12px; min-width: 140px; }
+td b { font-weight: 650; }
+.tri { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 0; }
+.pill { font-size: 12px; font-weight: 600; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-family: inherit; color: var(--fg); }
+.pill[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.note { color: var(--fg-2); font-size: 12.5px; margin: 6px 0 0; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; margin: 10px 0; }
+.card .why { color: var(--fg-2); font-size: 12.5px; margin-top: 6px; }
+.kbd { font-family: ui-monospace, Menlo, monospace; font-size: 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
+.footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--dim); font-size: 12px; }
+</style>
+
+<div class="wrap">
+<h1>Reflect 综合</h1>
+<div class="sub">11 个真实会话（seekstation ×8 · auto-leads ×1 · RiloPlayer ×2，2026-11-06 ~ 11-13）· 3 位审阅器 30 项发现 → 逐条过标准。点「采用」勾选你想让我执行的行。</div>
+
+<h2><span class="n">A</span>Accepted — 待你批准（14 项）</h2>
+<table>
+<thead><tr><th></th><th>问题</th><th>提案</th><th>路由</th></tr></thead>
+<tbody>
+<tr><td class="id">A1</td><td>命名参照（模板 URL/截图）是行为规格，打开一次就照印象做，产出与参照的关键行为不符（table-filter 的行点击→右侧详情被做成可筛选表格）</td><td>UI 参照工作流：构建前把参照拆成行为清单；交付物必须含参照 vs 实现的并排对比；同一参照自动推广到同类兄弟页面</td><td class="route">新技能 <b>ui-reference</b>（平台无关）</td></tr>
+<tr><td class="id">A2</td><td>模型验证 + 回归测试全绿 ≠ 可以上线——上线阻塞在模型看不到的层（部署版本、线上配置、回退路径），用户被迫三轮追问才问齐</td><td>Hand off 增加上线边界声明：模型未覆盖的层（运行版本含修复、线上配置已加载、off/回退路径）逐项列出，不用模型证据回答 go/no-go</td><td class="route">statechart · Hand off</td></tr>
+<tr><td class="id">A3</td><td>守钱/不可逆操作的控制开关（off/shadow/enforce/suspended）本身是台状态机，用户问的运营问题就是它的迁移守卫，但没进同一份分析</td><td>Write the spec 增补：建模对象守钱或不可逆操作时，把控制状态和守卫一并入模</td><td class="route">statechart · Write the spec</td></tr>
+<tr><td class="id">A4</td><td>找到规则违反后直接停在 bug 清单，用户要自己说「整理下方案」再「补 4 条回归测试」</td><td>Hand off 补齐：每条发现映射到唯一一个具名回归测试；附一段可批准的修复方案（模型描述真实代码时）<span class="tag conv">收敛</span></td><td class="route">statechart · Hand off</td></tr>
+<tr><td class="id">A5</td><td>采用了带平台先例的概念词（「就像是 macOS 的预览」）后，按自己的理解扩充成更复杂的流程，整功能被毙</td><td>概念词绑定先例：用户采纳概念并点名平台先例时，按先例的交互契约实现，构建前确认词↔行为的映射</td><td class="route">apple-design · 原生惯例</td></tr>
+<tr><td class="id">A6</td><td>沉淀技能时默认把通用平台知识困在项目作用域里（rilo-macos-design），被纠正后才拆成通用技能 + 项目文档</td><td>apple-design 声明自身通用性边界：项目交互决策记项目文档，永不写进本技能；通用版收入 elricli-skills 供所有项目触发</td><td class="route">apple-design · 设计上下文 + 采纳进本仓库</td></tr>
+<tr><td class="id">A7</td><td>设置页布局还要靠用户贴截图——HIG 已覆盖 System Settings 模式（左分类栏+分组详情+⌘,），应主动提出</td><td>落实到界面与交互节点名命名 System Settings 模式，使其无需用户 mockup 即触发</td><td class="route">apple-design · 布局</td></tr>
+<tr><td class="id">A8</td><td>验证通道坏了绕道走：UI 自动化挂了后用自认不可靠的离屏渲染替代，逐轮重复同一句「仍未验证」，2 小时不向用户升级</td><td>验证与交付节增补：观察通道不可用时，把恢复通道本身升级为具名阻塞并问用户；替代性弱证据不得跨过一个交付周期</td><td class="route">apple-design · 验证与交付</td></tr>
+<tr><td class="id">A9</td><td>设计探索里新变体只有视觉皮肤差异，布局/交互模型雷同，两轮被评「太传统」作废</td><td>探索轮次要求结构性差异：布局或交互模型至少一项不同；纯换肤的轮次不算探索</td><td class="route">prototype · 步骤 4</td></tr>
+<tr><td class="id">A10</td><td>方向反转重建时已确认的需求悄悄丢失（播放列表）</td><td>反转方向时按「新方向 + 已确认项并集」重建<span class="tag conv">收敛</span><span class="tag applied">部分已落地</span></td><td class="route">prototype · 步骤 6（补反转句）</td></tr>
+<tr><td class="id">A11</td><td>提案重开用户 40 分钟前明确推迟的范围（云端），选项里又集体漏掉播放列表——前会话上下文没进文档</td><td>步骤 1 增补：提案前从引用线程/决策文档重建「核心要素 + 已推迟范围」清单（拿不到就问用户）；纠正中出现的前会话事实当场写入持久决策文档</td><td class="route">prototype · 步骤 1</td></tr>
+<tr><td class="id">A12</td><td>原型被命令转正式实现时（「功能需要完全实现」），技能只有「一次性」框架没有转身路径——与已落地的「Stop at the decision」需要合并成一条有纪律的 pivot</td><td>把 Stop at the decision 改写为双分支：用户明确下令转正式实现时，定义升级仪式（迁入真实代码库、换真实子系统、真实验证、设计技能过审），与悄悄吸收区分开<span class="tag conv">收敛</span><span class="tag applied">改写已落地规则</span></td><td class="route">prototype · 结尾规则</td></tr>
+<tr><td class="id">A13</td><td>原型产出没有结构化落盘路径：IDEAS.md 建了又删，功能表最终靠用户点名 docs/product-feature-map.md</td><td>交付物节增补：决策落为持久结构化文档（功能地图 + 决定/待验证/已实现三分），删功能时同一改动内从文档移除</td><td class="route">prototype · Reply 段前</td></tr>
+<tr><td class="id">A14</td><td>bug 路径回放到真实代码的具体做法（绝对路径导入 repo 模块 + 一次性容器）每次重新摸索</td><td>Hand off 回放节写明：scratch 内以绝对路径导入 repo 模块，普通 node 运行，配合隔离的一次性容器</td><td class="route">statechart · Hand off</td></tr>
+</tbody>
+</table>
+<div class="note">「收敛」= 2+ 审阅器同时发现；「部分已落地」= 9cb9cff 已覆盖一部分，本行只补差量。</div>
+
+<h2><span class="n">B</span>Description tune — 需要你先解除 <span class="kbd">disable-model-invocation</span>（3 项）</h2>
+<table>
+<thead><tr><th></th><th>问题</th><th>提案</th><th>路由</th></tr></thead>
+<tbody>
+<tr><td class="id">D1</td><td>多租户设计会上，核心结构规则（企业空间、隔离、归属）全靠用户 6 轮口头供给——statechart 的规则提取恰是需求逼问器，但 bug-finding 的描述把这一面藏住了</td><td>description 增触发面：「设计含访问/归属/隔离规则的系统（多租户、权限）时，先于方案写出未言明的规则」。三个技能现在全靠 $-显式调用，解除 flag 后此调优才生效</td><td class="route">tune description: statechart</td></tr>
+<tr><td class="id">D2</td><td>对照参照模板改 UI 的场景（table-filter 三轮返工）本可复用 prototype 的截图验证纪律，但描述只写「throwaway exploration」，没触发</td><td>description 增触发面：「按参照模板/设计稿/截图实现或改版 UI 时，交付前渲染参照 vs 结果对比」。同样需解除 flag</td><td class="route">tune description: prototype</td></tr>
+<tr><td class="id">D3</td><td>「指定模板实现 UI」与「探索式原型」是两种工作，D2 若并入 prototype 描述会稀释其触发精度——倾向把 D2 并入 A1 的新技能 ui-reference，prototype 只加半句</td><td>合并裁决：A1 承载「参照实现」场景，prototype description 只补「/prototype 也用于参照模板的探索对比」，避免两个技能抢同一触发</td><td class="route">tune description: prototype（保守版）</td></tr>
+</tbody>
+</table>
+
+<h2><span class="n">C</span>Rejected（9 项）</h2>
+<div class="card"><b>C1 · TLA2TOOLS/JAVA env 覆盖未文档化</b><div class="why">Reason: already-covered — 已在 b7115d1 落地（Run 节已写明两个环境变量）。</div></div>
+<div class="card"><b>C2 · 变体永不删除/用户叫留三连</b><div class="why">Reason: already-covered — 9cb9cff 的「Preserve what the user approved」块已覆盖（确认的变体/功能除非用户明示丢弃才可移除）。D3 的姊妹判断：分歧仅在「贴日期目录」这一实现细节，A14 类具体约定不重复入文。</div></div>
+<div class="card"><b>C3 · UI 构建前先读 repo 设计规则/技能</b><div class="why">Reason: already-covered — 9cb9cff 步骤 2（先读 AGENTS.md 指针、design-rule 文档、.agents/skills/）+ 步骤 5（变体对照设计技能核查）已落地。</div></div>
+<div class="card"><b>C4 · 已确认功能不得在重建中消失</b><div class="why">Reason: already-covered — 同 9cb9cff Preserve 块。A10 只保留「反转方向的并集重建」这半句差量。</div></div>
+<div class="card"><b>C5 · macos-app-bundling 新技能（Homebrew dylib/部署目标、LGPL 固定源码管线、otool -L 门禁、签名与许可）</b><div class="why">Reason: existing-skill-first + durability（暂缓）——技能本体极具价值，但它描述的是 RiloPlayer 一条已跑通的脚本管线（build-playback-dependencies.py 等已自文档化）。等第二个 macOS 打包项目出现（模式重现）再提炼成技能，避免基于单例过早抽象。到时路由：new skill: macos-app-bundling。</div></div>
+<div class="card"><b>C6 · mpv render_gl 三坑（videotoolbox-copy、FBO 绑定、NSOpenGLView）</b><div class="why">Reason: 与 C5 同体——mpv 集成细节随代码库演进（GL→Metal 迁移在苹果路线图上），单例事实先留在 RiloPlayer 本地文档；C5 立项时一并入技。</div></div>
+<div class="card"><b>C7 · lavfi 合成测试片（PGS 需手拼 PES 字节）</b><div class="why">Reason: 同 C5/C6——播放器测试媒体制作是 macos-app-bundling 的自然章节，暂缓理由同上。</div></div>
+<div class="card"><b>C8 · tdd 相关（两审阅器均确认 billing 会话中 tdd 被正确执行，无缺口）</b><div class="why">Reason: skill-not-used + no-gap — 无编辑必要。</div></div>
+<div class="card"><b>C9 · seekstation 发布流程/prod-SQL 门禁/e2e --output 约定</b><div class="why">Reason: skill-not-used（父会话可编辑集之外）——这些已是 seekstation 仓库 wiki 与本地技能的知识，且用户把「打 tag 前确认」当作控制门而非摩擦，不改。</div></div>
+</div>
+
+<h2><span class="n">D</span>Backlog（3 项）</h2>
+<div class="card"><b>B1 · base-sync 会话起点门</b><div class="why">模式：用户的期望锚定在远端 main + 线上生产的并集上，代理在 worktree 子集上工作——漂移穿过所有现有门（分支卫生、liveness 发布校验），用户成了那个回归测试（「你需要先拉取下远端 main」×多次；「先 pull 下远端代码，然后分析看看」已成开场白）。命中：v0.12.41 差点带着缺失计费运营 UI 的基线上线。机制建议：个人 hooks/包装脚本在会话起点自动 git fetch + 报告 behind/ahead，并在回答 go-live 类问题前先查线上运行版本。等 hook 基建成型后落地，比技能文更可靠。</div></div>
+<div class="card"><b>B2 · 发布仪式的半自动化</b><div class="why">模式：「提交推送，并打一个新 tag」11 月出现约 15 次，变体仅「不打新 tag」（配置同步类）。机制建议：seekstation 仓库加一个 <span class="kbd">/release</span> 项目技能或 git alias（提交推送 → tag → 触发 CI → 报告流水线链接），把固定三连压成一条命令。属项目级改造，不在本仓库。</div></div>
+<div class="card"><b>B3 · 通道故障升级超时</b><div class="why">模式：验证通道故障 2 小时未升级为用户问题（RiloPlayer UI 自动化）。A8 已在 apple-design 落一条规则；机制化版本（监控自动化服务健康、超时自动升级）需要 harness hook，记入 devex 待办。与 [[careful/reflect]] 原则 encode-lessons-in-structure 一致。</div></div>
+
+<h2><span class="n">E</span>裁决说明</h2>
+<div class="note" style="margin-bottom:8px">
+30 项发现 → A 14 + D-tune 3 + R 9 + Backlog 3（部分行跨类，如 C2/C3/C4 是 A10-A12 的已落地部分被单列后驳回）。<br>
+标准应用要点：收敛加权（变体保留、设计参照、模型≠上线 三处双审阅器共振）；已落地优先（correct 提交 9cb9cff/b7115d1 吸收了 4 项）；新技能从严（ui-reference 过，macos-app-bundling 缓——后者是单例管线非复现模式）；mechanism > prose（base-sync、发布仪式、通道监控进 Backlog 等基建）。
+</div>
+
+<div class="tri" role="group" aria-label="批量操作">
+  <button class="pill" id="allA">全选 A 组</button>
+  <button class="pill" id="clearAll">清空</button>
+  <button class="pill" id="copySel">复制已选行号</button>
+</div>
+<div class="footer">Reflect · pstack · 2026-11-13 · 源会话 11 个真实用户会话（另有 21 个 guardian 子代理转录已排除）</div>
+</div>
+
+<script>
+document.querySelectorAll('.pill').forEach(b => { b.type='button'; });
+const rows = document.querySelectorAll('tbody tr');
+rows.forEach(r => {
+  const id = r.querySelector('.id').textContent.trim();
+  const tds = r.querySelectorAll('td');
+  const route = tds[tds.length-1];
+  if (!route.querySelector('button')) {
+    const btn = document.createElement('button');
+    btn.className='pill'; btn.textContent='采用'; btn.type='button'; btn.dataset.id=id;
+    btn.addEventListener('click', () => {
+      const on = btn.getAttribute('aria-pressed')==='true';
+      btn.setAttribute('aria-pressed', String(!on));
+    });
+    route.appendChild(btn);
+  }
+});
+function setAll(on){ document.querySelectorAll('button[data-id]').forEach(b=>b.setAttribute('aria-pressed',String(on))); }
+document.getElementById('allA').addEventListener('click', ()=>{ setAll(false); document.querySelectorAll('tbody tr button[data-id]').forEach(b=>{ if(b.dataset.id.startsWith('A')) b.setAttribute('aria-pressed','true'); }); });
+document.getElementById('clearAll').addEventListener('click', ()=>setAll(false));
+document.getElementById('copySel').addEventListener('click', async () => {
+  const sel=[...document.querySelectorAll('button[data-id]')].filter(b=>b.getAttribute('aria-pressed')==='true').map(b=>b.dataset.id);
+  const text='采用: '+(sel.join(', ')||'(无)');
+  try { await navigator.clipboard.writeText(text); } catch(e) {}
+  document.getElementById('copySel').textContent = text;
+});
+</script>

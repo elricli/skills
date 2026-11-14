@@ -1,0 +1,99 @@
+{
+  "reference": "/Users/elric/Codespaces/Elric/skills/skills/prototype/references/canvas-reference.png",
+  "actual": "/Users/elric/Codespaces/Elric/skills/.scratch/prototype-shell/after-5/actual.png",
+  "baselineSha256": "61d55947ee50594e593b0eb855a891abfc58cda8cf93b1287c6d7c442cca1055",
+  "size": [
+    2000,
+    1870
+  ],
+  "excluded": [
+    {
+      "name": "Player",
+      "left": 165,
+      "top": 436,
+      "right": 1160,
+      "bottom": 1056
+    },
+    {
+      "name": "Settings · Appearance",
+      "left": 1217,
+      "top": 436,
+      "right": 1975,
+      "bottom": 1181
+    }
+  ],
+  "approvedChanges": [
+    {
+      "id": "remove-ask-claude",
+      "request": "ASK Claude 这个按钮需要去掉！",
+      "effect": "Remove the button and its popover; compact and recenter the remaining tool palette.",
+      "regions": [
+        [
+          718,
+          1790,
+          1284,
+          1865
+        ]
+      ]
+    }
+  ],
+  "overall": {
+    "excluded": false,
+    "comparedPixels": 2515940,
+    "differentPixels": 106558,
+    "differentPercent": 4.2353,
+    "meanChannelError": 0.8361
+  },
+  "regions": {
+    "title-bar": {
+      "excluded": false,
+      "comparedPixels": 140000,
+      "differentPixels": 12017,
+      "differentPercent": 8.5836,
+      "meanChannelError": 2.4835
+    },
+    "page-menu": {
+      "excluded": false,
+      "comparedPixels": 8840,
+      "differentPixels": 3023,
+      "differentPercent": 34.1968,
+      "meanChannelError": 6.3339
+    },
+    "view-controls": {
+      "excluded": false,
+      "comparedPixels": 14280,
+      "differentPixels": 4748,
+      "differentPercent": 33.2493,
+      "meanChannelError": 8.5643
+    },
+    "canvas-heading": {
+      "excluded": false,
+      "comparedPixels": 40650,
+      "differentPixels": 7042,
+      "differentPercent": 17.3235,
+      "meanChannelError": 14.0436
+    },
+    "player-label-and-actions": {
+      "excluded": false,
+      "comparedPixels": 37370,
+      "differentPixels": 9867,
+      "differentPercent": 26.4035,
+      "meanChannelError": 1.2911
+    },
+    "settings-label-and-actions": {
+      "excluded": false,
+      "comparedPixels": 28564,
+      "differentPixels": 9720,
+      "differentPercent": 34.0288,
+      "meanChannelError": 3.4064
+    },
+    "bottom-toolbar": {
+      "excluded": true,
+      "comparedPixels": 0,
+      "differentPixels": 0,
+      "differentPercent": 0,
+      "meanChannelError": 0.0
+    }
+  },
+  "pixelExact": false
+}

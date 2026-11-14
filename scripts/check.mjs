@@ -6,6 +6,7 @@
 //   - .claude-plugin/plugin.json "skills" == the skills dir (auto-discovered, no hand list)
 //   - .codex-plugin/plugin.json "skills" == the skills dir
 //   - README "What's inside" table lists exactly the skills on disk
+//   - model instructions do not restore model rule files or fixed model fallbacks
 //
 // Run: node scripts/check.mjs   (exit 1 with a listing on any drift)
 
@@ -61,8 +62,29 @@ if (JSON.stringify(readmeSkills) !== JSON.stringify(skillDirs)) {
   for (const s of stale) errors.push(`README "What's inside" table lists \`${s}\` which does not exist on disk`);
 }
 
+const markdownFiles = (root) => existsSync(root)
+  ? readdirSync(root, { withFileTypes: true })
+      .filter((entry) => entry.name !== "node_modules" && !entry.name.startsWith("."))
+      .flatMap((entry) => {
+        const file = join(root, entry.name);
+        return entry.isDirectory() ? markdownFiles(file) : file.endsWith(".md") ? [file] : [];
+      })
+  : [];
+
+const retiredModelConfig = /\b(?:role-line rule|(?:pstack|elric(?:-skills)?)-models\.md)\b/i;
+const fixedModelFallback = /\b(?:defaults?|fallback)\b[^\n.]*`(?:claude|grok|cursor-grok|composer)-[^`]+`/i;
+for (const file of ["README.md", ...markdownFiles("skills"), ...markdownFiles("agents")]) {
+  const source = readFileSync(file, "utf8");
+  if (retiredModelConfig.test(source)) {
+    errors.push(`${file} references model rule files; discover models through the current Agent instead`);
+  }
+  if (fixedModelFallback.test(source)) {
+    errors.push(`${file} sets a fixed model fallback; keep model choices as recommendations from runtime discovery`);
+  }
+}
+
 if (errors.length > 0) {
-  console.error("manifest drift:\n" + errors.map((e) => `  - ${e}`).join("\n"));
+  console.error("repository drift:\n" + errors.map((e) => `  - ${e}`).join("\n"));
   process.exit(1);
 }
-console.log(`ok: ${skillDirs.length} skills (${skillDirs.join(", ")}) consistent across manifests and README`);
+console.log(`ok: ${skillDirs.length} skills (${skillDirs.join(", ")}) consistent across manifests and README; model policy checked`);

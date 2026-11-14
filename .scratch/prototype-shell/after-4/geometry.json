@@ -1,0 +1,109 @@
+{
+  "geometry": {
+    ".title-bar": {
+      "x": 0,
+      "y": 7,
+      "width": 2000,
+      "height": 63,
+      "font": "16px \"Canvas Sans\", -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "color": "rgb(32, 32, 32)"
+    },
+    ".project-title": {
+      "x": 25,
+      "y": 27,
+      "width": 226.421875,
+      "height": 24,
+      "font": "19px / 24px \"Canvas Sans\", -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "color": "rgb(32, 32, 32)"
+    },
+    "#export-canvas": {
+      "x": 1786.4375,
+      "y": 20,
+      "width": 117.5625,
+      "height": 38,
+      "font": "20px \"Canvas Sans\", -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    "#fullscreen": {
+      "x": 1912,
+      "y": 19,
+      "width": 32,
+      "height": 40,
+      "font": "16px \"Canvas Sans\", -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "color": "rgb(32, 32, 32)"
+    },
+    "#close-preview": {
+      "x": 1952,
+      "y": 19,
+      "width": 32,
+      "height": 40,
+      "font": "16px \"Canvas Sans\", -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "color": "rgb(32, 32, 32)"
+    },
+    ".page-menu": {
+      "x": 16,
+      "y": 85,
+      "width": 113,
+      "height": 52,
+      "font": "20px \"Canvas Sans\", -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "color": "rgb(32, 32, 32)"
+    },
+    ".view-controls": {
+      "x": 1790,
+      "y": 85,
+      "width": 194,
+      "height": 52,
+      "font": "16px \"Canvas Sans\", -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "color": "rgb(32, 32, 32)"
+    },
+    "#canvas-heading": {
+      "x": 165,
+      "y": 253,
+      "width": 454.71875,
+      "height": 60,
+      "font": "600 51px / 60px \"Canvas Display\", sans-serif",
+      "color": "rgb(24, 24, 24)"
+    },
+    "#page-list .page-label": {
+      "x": 164,
+      "y": 400,
+      "width": 997,
+      "height": 35,
+      "font": "16px \"Canvas Sans\", -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "color": "rgb(32, 32, 32)"
+    },
+    "#page-list .screen": {
+      "x": 164,
+      "y": 435,
+      "width": 997,
+      "height": 623,
+      "font": "16px \"Canvas Sans\", -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "color": "rgb(32, 32, 32)"
+    },
+    "#page-detail .page-label": {
+      "x": 1216,
+      "y": 400,
+      "width": 760,
+      "height": 35,
+      "font": "16px \"Canvas Sans\", -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "color": "rgb(32, 32, 32)"
+    },
+    "#page-detail .screen": {
+      "x": 1216,
+      "y": 435,
+      "width": 760,
+      "height": 748,
+      "font": "16px \"Canvas Sans\", -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "color": "rgb(32, 32, 32)"
+    },
+    "#dock": {
+      "x": 724.53125,
+      "y": 1798,
+      "width": 550.9375,
+      "height": 57,
+      "font": "16px \"Canvas Sans\", -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "color": "rgb(32, 32, 32)"
+    }
+  },
+  "errors": []
+}

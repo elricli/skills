@@ -1,0 +1,76 @@
+{
+  "reference": "/Users/elric/Codespaces/Elric/skills/skills/prototype/references/canvas-reference.png",
+  "actual": "/Users/elric/Codespaces/Elric/skills/.scratch/prototype-shell/before.png",
+  "baselineSha256": "61d55947ee50594e593b0eb855a891abfc58cda8cf93b1287c6d7c442cca1055",
+  "size": [
+    2000,
+    1870
+  ],
+  "excluded": [
+    {
+      "name": "Player",
+      "left": 165,
+      "top": 436,
+      "right": 1160,
+      "bottom": 1056
+    },
+    {
+      "name": "Settings · Appearance",
+      "left": 1217,
+      "top": 436,
+      "right": 1975,
+      "bottom": 1181
+    }
+  ],
+  "overall": {
+    "comparedPixels": 2558390,
+    "differentPixels": 2463670,
+    "differentPercent": 96.2977,
+    "meanChannelError": 10.5886
+  },
+  "regions": {
+    "title-bar": {
+      "comparedPixels": 140000,
+      "differentPixels": 45283,
+      "differentPercent": 32.345,
+      "meanChannelError": 12.3809
+    },
+    "page-menu": {
+      "comparedPixels": 8840,
+      "differentPixels": 8840,
+      "differentPercent": 100.0,
+      "meanChannelError": 17.3239
+    },
+    "view-controls": {
+      "comparedPixels": 14280,
+      "differentPixels": 14280,
+      "differentPercent": 100.0,
+      "meanChannelError": 16.7876
+    },
+    "canvas-heading": {
+      "comparedPixels": 40650,
+      "differentPixels": 40650,
+      "differentPercent": 100.0,
+      "meanChannelError": 50.0735
+    },
+    "player-label-and-actions": {
+      "comparedPixels": 37370,
+      "differentPixels": 37370,
+      "differentPercent": 100.0,
+      "meanChannelError": 10.3862
+    },
+    "settings-label-and-actions": {
+      "comparedPixels": 28564,
+      "differentPixels": 28564,
+      "differentPercent": 100.0,
+      "meanChannelError": 12.722
+    },
+    "bottom-toolbar": {
+      "comparedPixels": 42450,
+      "differentPixels": 42450,
+      "differentPercent": 100.0,
+      "meanChannelError": 16.5368
+    }
+  },
+  "pixelExact": false
+}
