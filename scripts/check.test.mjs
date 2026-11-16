@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -10,19 +10,25 @@ const checker = fileURLToPath(new URL("./check.mjs", import.meta.url));
 const skill = (policy, body = "") =>
   ["---", "name: example", "description: Example skill.", policy, "---", "", body].join("\n");
 
-function check(t, content) {
+function check(t, content, { metadata = "policy:\n  allow_implicit_invocation: false\n", versions = ["0.1.1", "0.1.1"] } = {}) {
   const root = mkdtempSync(join(tmpdir(), "skills-check-"));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   for (const dir of ["skills/example", "skills/other", ".claude-plugin", ".codex-plugin"]) {
     mkdirSync(join(root, dir), { recursive: true });
+  }
+  for (const name of ["example", "other"]) {
+    mkdirSync(join(root, "skills", name, "agents"));
+    if (metadata !== null || name === "other") {
+      writeFileSync(join(root, "skills", name, "agents/openai.yaml"), name === "other" ? "policy:\n  allow_implicit_invocation: false\n" : metadata);
+    }
   }
   writeFileSync(join(root, "skills/example/SKILL.md"), content);
   writeFileSync(
     join(root, "skills/other/SKILL.md"),
     skill("disable-model-invocation: true").replace("name: example", "name: other"),
   );
-  for (const dir of [".claude-plugin", ".codex-plugin"]) {
-    writeFileSync(join(root, dir, "plugin.json"), JSON.stringify({ skills: "./skills/" }));
+  for (const [index, dir] of [".claude-plugin", ".codex-plugin"].entries()) {
+    writeFileSync(join(root, dir, "plugin.json"), JSON.stringify({ skills: "./skills/", version: versions[index] }));
   }
   writeFileSync(join(root, "README.md"), "| \u0060example\u0060 |\n| \u0060other\u0060 |\n");
   return spawnSync(process.execPath, [checker], { cwd: root, encoding: "utf8" });
@@ -80,3 +86,39 @@ test("rejects a policy in a document section instead of opening frontmatter", (t
   assert.match(result.stderr, /skills\/example\/SKILL\.md/);
   assert.match(result.stderr, /disable-model-invocation: true/);
 });
+
+for (const metadata of [null, "", "allow_implicit_invocation: false\n", "policy:\n  allow_implicit_invocation: true\n", 'policy:\n  allow_implicit_invocation: "false"\n', "policy:\n  allow_implicit_invocation: false\n  allow_implicit_invocation: true\n"]) {
+  test(`rejects invalid Codex invocation policy ${JSON.stringify(metadata)}`, (t) => {
+    const result = check(t, skill("disable-model-invocation: true"), { metadata });
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /skills\/example\/agents\/openai.yaml/);
+  });
+}
+for (const versions of [["0.1.1", "0.1.0"], ["invalid", "invalid"], [null, null]]) {
+  test(`rejects plugin version drift ${JSON.stringify(versions)}`, (t) => {
+    const result = check(t, skill("disable-model-invocation: true"), { versions });
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /version/);
+  });
+}
+
+for (const matching of [true, false]) {
+  test(`version bump ${matching ? "updates both manifests" : "rejects drift without writing"}`, (t) => {
+    const root = mkdtempSync(join(tmpdir(), "skills-bump-"));
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    const files = [".claude-plugin", ".codex-plugin"].map((dir, index) => {
+      mkdirSync(join(root, dir));
+      const file = join(root, dir, "plugin.json");
+      writeFileSync(file, JSON.stringify({ name: "example", version: index && !matching ? "0.1.0" : "0.1.1" }));
+      return file;
+    });
+    const before = files.map((file) => readFileSync(file, "utf8"));
+    const result = spawnSync(process.execPath, [fileURLToPath(new URL("./bump-version.mjs", import.meta.url))], { cwd: root, encoding: "utf8" });
+    assert.equal(result.status, matching ? 0 : 1, result.stderr);
+    if (matching) {
+      for (const file of files) assert.deepEqual(JSON.parse(readFileSync(file, "utf8")), { name: "example", version: "0.1.2" });
+    } else {
+      assert.deepEqual(files.map((file) => readFileSync(file, "utf8")), before);
+    }
+  });
+}

@@ -8,8 +8,10 @@ Mostly a port of [poteto's pstack](https://github.com/cursor/plugins/tree/main/p
 upstream design: `chef-mode` is the single entry point, it routes 23 playbooks
 and the tactical skills as its steps need them, and 24 one-rule principle
 skills form a vocabulary you can steer with mid-task ("apply prove it works").
-Skills are tagged `disable-model-invocation`, so nothing self-triggers — the
-entry point routes, or you type the skill.
+Claude Code skills set `disable-model-invocation: true` in `SKILL.md`.
+Codex skills set `policy.allow_implicit_invocation: false` in each skill's
+`agents/openai.yaml`, as described in the [Codex skills documentation](https://developers.openai.com/codex/skills).
+These settings disable implicit skill selection in their respective hosts.
 
 Ported through [pstack 0.15.42](https://github.com/cursor/plugins/tree/bf0c7cd80abdbf7fe47b634978a7d1b4071f71a7/pstack)
 (2026-11-15). Playbooks trace affected code directly. Use `how` for a
@@ -141,3 +143,10 @@ explicitly selected by the user takes precedence over recommendations.
 skills/   all skills, flat structure
 agents/   subagent definitions (elric-agent, comment-sicko)
 ```
+
+## Plugin updates
+
+Every published plugin update must increase the shared Claude Code and Codex
+version. Run `node scripts/bump-version.mjs` once per update to increment both
+patch versions, then run the repository checks in [AGENTS.md](AGENTS.md#verification).
+The checker rejects missing, invalid, or mismatched versions.

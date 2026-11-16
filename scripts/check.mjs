@@ -28,6 +28,11 @@ for (const dir of skillDirs) {
     errors.push(`skills/${dir}/ has no SKILL.md`);
     continue;
   }
+  const metadataPath = join("skills", dir, "agents", "openai.yaml");
+  // Keep this policy file canonical so duplicate or misplaced YAML keys cannot mask it.
+  if (!existsSync(metadataPath) || readFileSync(metadataPath, "utf8").replaceAll("\r\n", "\n") !== "policy:\n  allow_implicit_invocation: false\n") {
+    errors.push(`${metadataPath} must contain exactly policy: followed by two-space-indented allow_implicit_invocation: false`);
+  }
   const frontmatter = readFileSync(path, "utf8").match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1] ?? "";
   if (!/^name:\s*\S+/m.test(frontmatter)) {
     errors.push(`skills/${dir}/SKILL.md frontmatter has no "name:" field`);
@@ -47,15 +52,23 @@ const readJson = (file) => {
   }
 };
 
+const versions = [];
+
 // both plugin manifests auto-discover the skills dir — never a hand-maintained array
 for (const file of [".claude-plugin/plugin.json", ".codex-plugin/plugin.json"]) {
   const doc = readJson(file);
+  if (!/^\d+\.\d+\.\d+$/.test(doc.version ?? "")) {
+    errors.push(`${file} must have a numeric major.minor.patch version`);
+  }
+  versions.push(doc.version);
   if (Array.isArray(doc.skills)) {
     errors.push(`${file} "skills" is a hand-maintained array; use "./skills/" so it cannot drift from skills/`);
   } else if (doc.skills !== "./skills/") {
     errors.push(`${file} "skills" should be "./skills/" (auto-discover), got ${JSON.stringify(doc.skills)}`);
   }
 }
+
+if (versions[0] !== versions[1]) errors.push("Claude Code and Codex plugin versions must match");
 
 // README "What's inside" table is the human-readable index and must match disk
 const readme = readFileSync("README.md", "utf8");

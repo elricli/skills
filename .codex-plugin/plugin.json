@@ -1,6 +1,6 @@
 {
   "name": "elricli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "elric's engineering skills, mostly ported from poteto's pstack: chef-mode playbooks, arena/interrogate/swarm panels, verification skills, and 24 steering principles.",
   "author": {
     "name": "elricli",

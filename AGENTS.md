@@ -8,6 +8,8 @@ mistake here and add the rule. Drop a rule once its mistake cannot happen.
 | The skills/ directory is the only skill list; never hand-list skills in a manifest | `scripts/check.mjs` (fails on a hand-listed `"skills"` array in either plugin manifest) |
 | Every skill dir has a `SKILL.md` with a `name:` frontmatter field | `scripts/check.mjs` |
 | Every skill sets the top-level literal `disable-model-invocation: true` exactly once in its opening YAML frontmatter | `scripts/check.mjs`; `node --test scripts/check.test.mjs` covers missing, false, string, duplicate, nested, and body-only values |
+| Every skill has canonical `agents/openai.yaml` containing `policy:` and two-space-indented `allow_implicit_invocation: false` | `scripts/check.mjs`; policy regression tests |
+| Claude Code and Codex plugin versions match and increase on every plugin update; run `node scripts/bump-version.mjs` once per update | `scripts/check.mjs` checks format and equality; release diff review checks the increase |
 | README "What's inside" table lists exactly the skills on disk | `scripts/check.mjs` |
 | Marketplace copy must not advertise skills that do not exist | manual — `check.mjs` cannot parse prose; keep skill names in it only via the table |
 | New skills land as `skills/<name>/SKILL.md` and get a README table row in the same commit | `scripts/check.mjs` catches the missing row |
@@ -47,12 +49,12 @@ For each update:
    `pstack/` at the README baseline with that target. Port file changes instead
    of merging the upstream repository's unrelated plugin history.
 2. Port compatible changes and assess new skills against the boundaries above.
-   Keep `disable-model-invocation: true` on every skill. Update affected agents,
+   Keep `disable-model-invocation: true` and the Codex invocation policy on every skill. Update affected agents,
    playbooks, callers, references, tests, and README entries together. Delete
    obsolete references after updating their callers.
 3. Run the checks below and tests for changed executable code. Inspect the final
    diff for lost local adaptations and stale references.
-4. Once all in-scope changes are handled, update README's upstream version,
+4. Bump both plugin versions with `node scripts/bump-version.mjs`. Once all in-scope changes are handled, update README's upstream version,
    commit link, and date. Report the imported and skipped changes and validation
    results. Distinguish unavailable checks from passes.
 
