@@ -3,6 +3,7 @@
 //
 // Rules:
 //   - every skills/<dir>/ has a SKILL.md with a `name:` frontmatter field
+//   - every skill explicitly sets disable-model-invocation: true in frontmatter
 //   - .claude-plugin/plugin.json "skills" == the skills dir (auto-discovered, no hand list)
 //   - .codex-plugin/plugin.json "skills" == the skills dir
 //   - README "What's inside" table lists exactly the skills on disk
@@ -27,9 +28,13 @@ for (const dir of skillDirs) {
     errors.push(`skills/${dir}/ has no SKILL.md`);
     continue;
   }
-  const frontmatter = readFileSync(path, "utf8").split("---")[1] ?? "";
+  const frontmatter = readFileSync(path, "utf8").match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1] ?? "";
   if (!/^name:\s*\S+/m.test(frontmatter)) {
     errors.push(`skills/${dir}/SKILL.md frontmatter has no "name:" field`);
+  }
+  const invocationPolicy = [...frontmatter.matchAll(/^(?:disable-model-invocation|"disable-model-invocation"|'disable-model-invocation')[ \t]*:([^\r\n]*)$/gm)];
+  if (invocationPolicy.length !== 1 || !/^[ \t]+true(?:[ \t]+#.*)?[ \t]*$/.test(invocationPolicy[0][1])) {
+    errors.push(`${path} must set disable-model-invocation: true exactly once in YAML frontmatter`);
   }
 }
 
@@ -87,4 +92,4 @@ if (errors.length > 0) {
   console.error("repository drift:\n" + errors.map((e) => `  - ${e}`).join("\n"));
   process.exit(1);
 }
-console.log(`ok: ${skillDirs.length} skills (${skillDirs.join(", ")}) consistent across manifests and README; model policy checked`);
+console.log(`ok: ${skillDirs.length} skills (${skillDirs.join(", ")}) consistent across manifests and README; model and invocation policies checked`);

@@ -14,6 +14,7 @@ entry point routes, or you type the skill.
 Ported through [pstack 0.15.42](https://github.com/cursor/plugins/tree/bf0c7cd80abdbf7fe47b634978a7d1b4071f71a7/pstack)
 (2026-11-15). Playbooks trace affected code directly. Use `how` for a
 standalone walkthrough or through `teach`.
+Future updates follow the [pstack sync procedure](AGENTS.md#pstack-updates).
 
 Left upstream behind: `make-bot-ui`, `ketchup-video`, the benny automation
 pack, and the Origin/Bugbot branches of the PR playbooks (rewritten around
