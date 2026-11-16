@@ -11,6 +11,10 @@ skills form a vocabulary you can steer with mid-task ("apply prove it works").
 Skills are tagged `disable-model-invocation`, so nothing self-triggers — the
 entry point routes, or you type the skill.
 
+Ported through [pstack 0.15.42](https://github.com/cursor/plugins/tree/bf0c7cd80abdbf7fe47b634978a7d1b4071f71a7/pstack)
+(2026-11-15). Playbooks trace affected code directly. Use `how` for a
+standalone walkthrough or through `teach`.
+
 Left upstream behind: `make-bot-ui`, `ketchup-video`, the benny automation
 pack, and the Origin/Bugbot branches of the PR playbooks (rewritten around
 `gh`). `poteto-mode` →
@@ -63,7 +67,7 @@ npx skills add elricli/skills --agent opencode
 | `create-verification-skill` | Generate a project-local skill that drives the app and proves behavior | pstack (ported) |
 | `elric-help` | Find the right skill, playbook, or principle; answers only, starts nothing | pstack (ported) |
 | `figure-it-out` | Design a bespoke, auditable playbook when no bundled one fits | pstack (ported) |
-| `how` | Walkthrough of how a subsystem works; placement and layering questions | pstack (ported) |
+| `how` | Explain a subsystem in one read-only pass; placement and layering questions | pstack (ported) |
 | `in-your-own-words` | Play back the goal and problem before starting | pstack (ported) |
 | `interrogate` | Adversaries try to break a diff; only findings proven by a run survive | pstack (ported) |
 | `ketchup` | What changed in this chat since your last message, every open call listed | pstack (ported) |
@@ -73,7 +77,7 @@ npx skills add elricli/skills --agent opencode
 | `prototype` | UI wireframes and product flows as multiple page artboards on one navigable canvas | pstack (adapted) |
 | `recall` | Rebuild your recent working context from chat history and the shared record | pstack (ported) |
 | `reflect` | Mine the transcript with three reviewers; route learnings into skill edits | pstack (ported) |
-| `sharpen` | Rewrite a prompt deeper, not bigger, before you send it | pstack (ported) |
+| `sharpen` | Deepen a prompt and ask for prototypes to settle choices an experiment can answer | pstack (ported) |
 | `show-me-your-work` | A decision log a human can audit after stepping away | pstack (ported) |
 | `statechart` | TLA+ model check, rendered as a Mermaid statechart with bad states marked | pstack (ported) |
 | `swarm` | N parallel workers across slices, drained into one report | pstack (ported) |
@@ -82,7 +86,7 @@ npx skills add elricli/skills --agent opencode
 | `technical-writing` | Diátaxis + Google style + STE + Global English for docs and PR text | pstack (ported) |
 | `typescript-best-practices` | Type-system-discipline principle grounded in TypeScript syntax | pstack (ported) |
 | `unslop` | Cut AI tells from any writing | pstack (ported) |
-| `why` | Why code is shaped this way: parallel evidence search, cited and confidence-rated | pstack (ported) |
+| `why` | Trace decisions through commits and PR discussions; cite authors and mark inferences | pstack (ported) |
 
 | `principle-attack-the-premise` | Two fixes sharing a premise failed: test the premise, not a third fix | pstack (ported) |
 | `principle-boundary-discipline` | Guards at system boundaries; trust internal types | pstack (ported) |
